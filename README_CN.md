@@ -4,7 +4,7 @@ PaperChat, 提供了人人可用的arXiv论文对话机器人，只需要CPU即�
 
 <div>
 	<p align="center">
-  <img alt="Animation Demo" src="https://github.com/elenalulu/PaperChat/blob/main/docs/logo.png" width="660" />
+  <img alt="Animation Demo" src="https://github.com/elenalulu/FigureChat/blob/main/docs/logo.png" width="660" />
   </p>
 </div>
 
@@ -19,7 +19,7 @@ PaperChat, 提供了人人可用的arXiv论文对话机器人，只需要CPU即�
 
 <div>
 	<p align="center">
-  <img alt="Animation Demo" src="https://github.com/elenalulu/PaperChat/blob/main/docs/ui.png" width="660" />
+  <img alt="Animation Demo" src="https://github.com/elenalulu/FigureChat/blob/main/docs/ui.png" width="660" />
   </p>
 </div>
 <br>

@@ -6,7 +6,7 @@ PaperChat, provide quantized models to chat wtih arXiv papers, to run on cpu mac
 
 <div>
 	<p align="center">
-  <img alt="Animation Demo" src="https://github.com/elenalulu/PaperChat/blob/main/docs/logo.png" width="660" />
+  <img alt="Animation Demo" src="https://github.com/elenalulu/FigureChat/blob/main/docs/logo.png" width="660" />
   </p>
 </div>
 
@@ -21,7 +21,7 @@ PaperChat, provide quantized models to chat wtih arXiv papers, to run on cpu mac
 
 <div>
 	<p align="center">
-  <img alt="Animation Demo" src="https://github.com/elenalulu/PaperChat/blob/main/docs/ui.png" width="660" />
+  <img alt="Animation Demo" src="https://github.com/elenalulu/FigureChat/blob/main/docs/ui.png" width="660" />
   </p>
 </div>
 
