@@ -1,7 +1,6 @@
-[**🇨🇳中文**](https://github.com/elenalulu/PaperChat/blob/master/README_CN.md)
 
-# PaperChat
-PaperChat, provide quantized models to chat wtih arXiv papers, to run on cpu machines. Combining paper understanding and research on mutiple papers. Compiled llama.cpp already. 
+# FigureChat
+FigureChat, provide quantized models to chat wtih anlyst report figures, to run on cpu machines. Combining analyst report understanding and research on mutiple reports. Compiled llama.cpp already. 
 <br>
 
 <div>
@@ -14,9 +13,9 @@ PaperChat, provide quantized models to chat wtih arXiv papers, to run on cpu mac
 
 ## Usage
 
-- This project implements a paper content dialogue based on CPU operation.
-- Based on a keyword query mechanism to perform cross-paper question and answer.
-- You can build your own paper data resources without needing to download papers.
+- This project implements a figure content dialogue based on CPU operation.
+- Based on a keyword query mechanism to perform cross-report question and answer.
+- You can build your own report data resources without needing to download report.
 
 
 <div>
@@ -61,7 +60,7 @@ python main.py
 
 ## License
 
-The product is licensed under The Apache License 2.0, which allows for free commercial use. Please include the link to PaperChat and the licensing terms in your product description.
+The product is licensed under The Apache License 2.0, which allows for free commercial use. Please include the link to FigureChat and the licensing terms in your product description.
 
 
 ## Contribute
