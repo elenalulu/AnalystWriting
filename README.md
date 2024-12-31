@@ -1,6 +1,6 @@
 
 # FigureChat
-FigureChat, provide quantized models to chat wtih anlyst report figures, to run on cpu machines. Combining analyst report understanding and research on mutiple reports. Compiled llama.cpp already. 
+FigureChat, provide quantized models to chat with analyst report figures, to run on cpu machines. Combining analyst report understanding and research on multiple reports. Compiled llama.cpp already. 
 <br>
 
 <div>
