@@ -1,6 +1,7 @@
 
 # FigureChat
-FigureChat, provide quantized models to chat with analyst report figures, to run on cpu machines. Combining analyst report understanding and research on multiple reports. Compiled llama.cpp already. 
+人人可用的数据查询大模型，只需要CPU即可使用。
+
 <br>
 
 <div>
@@ -11,11 +12,11 @@ FigureChat, provide quantized models to chat with analyst report figures, to run
 
 -----------------
 
-## Usage
+## 用途
 
-- This project implements a figure content dialogue based on CPU operation.
-- Based on a keyword query mechanism to perform cross-report question and answer.
-- You can build your own report data resources without needing to download report.
+- 用量化模型实现在CPU上进行数据查询。
+- 使用关键词查询来搜索所有研究报告。
+- 可以添加个人pdf文档来定制化数据查询。
 
 
 <div>
@@ -26,15 +27,15 @@ FigureChat, provide quantized models to chat with analyst report figures, to run
 
 <br>
 
-## Requirements
+## 安装
 
-1.download gguf model and put it under the master path: 
+1.下载gguf量化模型，放到主文件夹下: 
 
 https://modelscope.cn/models/QuantFactory/Qwen2.5-7B-Instruct-GGUF/resolve/master/Qwen2.5-7B-Instruct.Q4_K_M.gguf
 
 <br>
 
-2.unzip llama_cpp.rar and put it under the master path:
+2.解压llama_cpp.rar压缩包，放到主文件夹下；并启动量化模型:
 
 ```shell
 cd llama_cpp
@@ -43,7 +44,7 @@ llama-server.exe -m ../Qwen2.5-7B-Instruct.Q4_K_M.gguf -c 2048
 ```
 <br>
 
-3.start another terminal:
+3.打开另一个终端，启动ui界面:
 
 ```shell
 cd chat_ui
