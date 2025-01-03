@@ -49,7 +49,7 @@ llama-server.exe -m ../Qwen2.5-7B-Instruct.Q4_K_M.gguf -c 2048
 ```shell
 cd chat_ui
 
-python main.py
+python main_finance.py
 ```
 
 <br>
