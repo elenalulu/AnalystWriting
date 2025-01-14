@@ -8,6 +8,7 @@ import requests
 import pandas as pd
 from collections import Counter
 import fitz 
+import glob
 
 
 client = openai.OpenAI(
@@ -43,18 +44,18 @@ def pdf_url(query):
     query_keyword_list = answer.split('&')
     label_keyword_total = []
     for query_keyword in query_keyword_list:
+        if '无' not in query_keyword:
+            results = df[df['company'] == query_keyword]
+            if 'Empty DataFrame' not in str(results):
+                for i in range(0, len(results)):
+                    oneline = results[i:(i+1)]
+                    company = oneline['company'].values 
+                    company = ''.join(company)
+                    label = oneline['label'].values 
+                    label = ''.join(label)
 
-        results = df[df['company'] == query_keyword]
-        if 'Empty DataFrame' not in str(results):
-            for i in range(0, len(results)):
-                oneline = results[i:(i+1)]
-                company = oneline['company'].values 
-                company = ''.join(company)
-                label = oneline['label'].values 
-                label = ''.join(label)
-
-                label_keyword_dict = {'label': label, 'company': query_keyword}
-                label_keyword_total.append(label_keyword_dict)
+                    label_keyword_dict = {'label': label, 'company': query_keyword}
+                    label_keyword_total.append(label_keyword_dict)
                 
 
     counts = Counter([item['label'] for item in label_keyword_total])
@@ -103,6 +104,105 @@ def data_qa(query, http_pdf, query_keyword_list, company):
 
 
     content = useful_articles + '。根据上文回答：' + query
+    completion = client.chat.completions.create(
+    model="",
+    messages=[
+        {"role": "user", "content": content}
+    ]
+    )
+    output = completion.choices[0].message
+    answer = re.findall(r"content='(.+?)'", str(output))
+    answer = '' .join(answer)
+    answer = str(answer)
+    if answer != '':
+        final_answer =  answer.replace('\\n','<br>')
+
+    return final_answer
+
+
+#personal
+def pdf_local(query):
+
+    local_pdf = 'none'
+    query_keyword_list = []
+    dialoge = '已找到个人文档→'
+    company = 'none'
+
+    http_pdf = ''
+    company = ''
+        
+    #which pdf
+    content =  query + '根据上面文字输出问题词语，格式如下:公司&指标&其他'
+    completion = client.chat.completions.create(
+    model="",
+    messages=[
+        {"role": "user", "content": content}
+    ]
+    )
+    output = completion.choices[0].message
+    answer = re.findall(r"content='(.+?)'", str(output))
+    answer = '' .join(answer)
+    answer = str(answer)
+    answer = answer.lower()
+    print (answer)
+
+    query_keyword_list = answer.split('&')
+
+    #让用户自己命名personal pdf的title
+    root_dir = '../personal_pdf/'
+    pattern = f'{root_dir}/*.pdf'
+    pdf_list = glob.glob(pattern)
+
+    title_total = []
+    for pdf_path in pdf_list:
+        title_raw = pdf_path.split('\\')
+        title_raw = title_raw[1]
+        title = title_raw.replace('.pdf','')
+        title = '$' + title + '$'
+        title_total.append(title)
+
+    content =  str(title_total) + '在上面的列表里选一个和' + query + '最接近的题目，题目在$和$之间，输出这个题目'
+    completion = client.chat.completions.create(
+    model="",
+    messages=[
+        {"role": "user", "content": content}
+    ]
+    )
+    output_title = completion.choices[0].message
+    answer_title = re.findall(r"content='(.+?)'", str(output_title))
+    answer_title = '' .join(answer_title)
+    most_title = answer_title.replace('$','')
+
+    #复制pdf到static路径
+    src = '../personal_pdf/' + most_title + '.pdf'
+    dst = './static/personal_document/' + most_title + '.pdf'
+    shutil.copy(src, dst)
+
+    local_pdf = dst
+
+    return local_pdf, query_keyword_list, dialoge, company
+
+
+
+def local_qa(query, local_pdf, query_keyword_list, company):
+
+    useful_articles = ''
+    for query_keyword in query_keyword_list:
+        if '无' not in query_keyword:
+            if len(useful_articles) < 1000:  #控制提取字数
+                try:
+                    with pdfplumber.open(local_pdf) as pdf:
+                        for page in pdf.pages:
+                            wholepage = page.extract_text()
+                            wholepage = wholepage.replace('\n','').replace(' ','')
+                            wholepage = wholepage.lower()
+                            if query_keyword in wholepage:
+                                useful_articles += wholepage
+                except:
+                        pass
+
+    content = useful_articles + '。根据上文回答：' + query
+
     completion = client.chat.completions.create(
     model="",
     messages=[
@@ -218,11 +318,24 @@ def home():
 @app.route("/url")
 def get_pdf_url():
     query = request.args.get('msg')
-    http_pdf, query_keyword_list, dialoge, company = pdf_url(query)
 
-    internet = ''
-    if http_pdf == 'none':
-        internet = internet_result(query)
+    #network chat
+    if '&&&' not in query: 
+        http_pdf, query_keyword_list, dialoge, company = pdf_url(query)
+
+        internet = ''
+        if http_pdf == 'none':
+            internet = internet_result(query)
+
+    #personal chat
+    else: 
+        query = query.replace('&&&','')
+        http_pdf, query_keyword_list, dialoge, company = pdf_local(query)
+
+        internet = ''
+        if http_pdf == 'none':
+            internet = internet_result(query)
+
 
     return [http_pdf, query_keyword_list, dialoge, internet]
 
@@ -230,8 +343,14 @@ def get_pdf_url():
 @app.route("/qa")
 def get_doc_response():
     query = request.args.get('msg')
-    http_pdf, query_keyword_list, dialoge, company = pdf_url(query)
-    output = data_qa(query, http_pdf, query_keyword_list, company) 
+
+    if '&&&' not in query: 
+        http_pdf, query_keyword_list, dialoge, company = pdf_url(query)
+        output = data_qa(query, http_pdf, query_keyword_list, company) 
+    else:
+        query = query.replace('&&&','')
+        http_pdf, query_keyword_list, dialoge, company = pdf_local(query)
+        output = local_qa(query, http_pdf, query_keyword_list, company) 
 
     return [output]
 
