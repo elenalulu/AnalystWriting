@@ -54,6 +54,14 @@ python main_finance.py
 
 <br>
 
+
+## 个人文档使用
+1.向personal_pdf文件夹放入个人pdf。
+2.把文件名写完整，例如：邮储银行_深度报告：聚焦稳健发展_经营韧性不断增强.pdf。
+3.在ui界面，点击个人文档页，即可进行本地文档查询。
+
+
+
 ## Contact
 
 <img src="docs/wechat.jpg" width="200" />
