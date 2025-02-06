@@ -11,7 +11,7 @@ from elasticsearch import Elasticsearch
 
 # 连接到远程 Elasticsearch
 es = Elasticsearch(
-    hosts=["https://s10.z100.vip:3618"]
+    hosts=["your own path"]
 )
 
 
