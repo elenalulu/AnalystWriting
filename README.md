@@ -31,7 +31,7 @@
 
 1.下载gguf量化模型，放到主文件夹下: 
 
-https://modelscope.cn/models/QuantFactory/Qwen2.5-7B-Instruct-GGUF/resolve/master/Qwen2.5-7B-Instruct.Q4_K_M.gguf
+https://modelscope.cn/models/prithivMLmods/Deepthink-Reasoning-7B-GGUF/resolve/master/Deepthink-Reasoning-7B.Q4_K_M.gguf
 
 <br>
 

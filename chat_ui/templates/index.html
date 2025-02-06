@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>550</title>
+    <title>Beyond AI</title>
     <link rel="shortcut icon" href="/static/favicon.ico">
     <link rel="bookmark" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/bootstrap.min.css">
@@ -23,15 +23,11 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
+         <!-- add local
          <li class="nav-item">
-          <a id='gen_click' class="nav-link active" href="#gen" onclick="showAndHidden1()">FigureChat</a>
+          <a id='board_click' class="nav-link active" href="#board" style="color: grey;" onclick="showAndHidden2()">点此添加本地文档</a>
          </li>
-
-
-         <li class="nav-item">
-          <a id='board_click' class="nav-link active" href="#board" style="color: grey;" onclick="showAndHidden2()">个人文档</a>
-         </li>
-
+          --> 
 
         </ul>
       </div>
@@ -45,7 +41,7 @@
         <div  class="left col-5 px-5 py-5 chat-box js-chat-gen bg-white">
           <div class="media w-90 mb-1"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle">
             <div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p><a>
-            请说出您的问题
+            请说出您的问题~
           </a></div></div></div>
         </div>
 
@@ -61,57 +57,14 @@
       </div>
 
 
-      <div id="chat_board" style="display:none" class="py-2 px-1">
-        <div  class="left col-5 px-5 py-5 chat-box js-chat-board bg-white">
-          <div class="media w-90 mb-1"><img src="/static/papa.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p><a>
-          可问答本地文档
-          </a></div></div></div>
-        </div>
-
-        <div id="display_board" style="display:none" class="right col-7 px-1 py-0 display-box js-display-board">
-          <embed width="100%" height="100%" src="/static/1.pdf" id='depth_pdf'></embed>
-        </div>
-
-        <div id="userInput_board" class="left col-5 input-group input-group-lg mt-1 bg-white">
-          <input id="textInput_board" type="text" name="msg" placeholder="点此聊天..." class="form-control js-text">
-          <input id="buttonInput_board" type="submit" value="发送">
-        </div>
-      </div>
-
-
       <script>   
-        function showAndHidden1(){ 
-          var p1=document.getElementById("display_gen"); 
-          var p2=document.getElementById("display_board"); 
-          var p3=document.getElementById("chat_gen"); 
-          var p4=document.getElementById("chat_board"); 
-          var p5=document.getElementById("board_click"); 
-          
-          if(p2.style.display=='block') 
-            p2.style.display='none';
-            p1.style.display='block';
-            p4.style.display='none';
-            p3.style.display='block';
-            p5.style.color='grey';
-            $('#board_click').removeClass('active');
-            $('#gen_click').addClass('active');
-          } 
+
+        var localfile = 'off'
 
         function showAndHidden2(){ 
-          var p1=document.getElementById("display_gen"); 
-          var p2=document.getElementById("display_board"); 
-          var p3=document.getElementById("chat_gen"); 
-          var p4=document.getElementById("chat_board");
           var p5=document.getElementById("board_click"); 
-
-          if(p1.style.display=='block') 
-            p1.style.display='none';
-            p2.style.display='block';
-            p3.style.display='none';
-            p4.style.display='block';
-            p5.style.color='white';
-            $('#gen_click').removeClass('active');
-            $('#board_click').addClass('active');
+          p5.style.color='white';
+          localfile = 'turnon'
           } 
 
 
@@ -120,60 +73,15 @@
           var $displaylog = $('.js-display-gen');
           var rawText = $("#textInput_gen").val();
 
+          if (localfile == 'turnon'){
+                var addText = rawText + '&&&'
+            }; 
+          if (localfile == 'off'){
+                var addText = rawText
+            }; 
+
           var userHtml = '<div class="media w-90 mb-3"><img src="/static/vip.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"><span>' + rawText + '</span></p></div></div></div>';
           $("#textInput_gen").val("");
-          $chatlog.append(userHtml);
-          $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
-
-
-          $.get("/url", { msg: rawText }).done(function(data) {
-            pdf_doc = data[0];
-            dialoge = data[2]
-            internet = data[3];
-          
-            pdf_depth = '<embed width="100%" height="100%" src="' + pdf_doc + '"></embed>' 
-            internet_result = $('<div class="ml-4"><div class="py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left" ></p></div></div>');
-
-            var $botHtml = $('<div class="media w-90 mb-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
-            $botHtml.find('p').html(dialoge);
-            $chatlog.append($botHtml);
-
-            
-            if (pdf_doc != 'none'){
-                var $displayHtml = $(pdf_depth);
-                $('#display_gen').empty();
-                $displaylog.append($displayHtml);
-           
-            };           
-            if (pdf_doc == 'none'){
-                var $displayHtml = $(internet_result);
-                $displayHtml.find('p').html(internet);
-                $('#display_gen').empty();
-                $displaylog.append($displayHtml);
-           
-            }  
-            });
-          
-
-          $.get("/qa", { msg: rawText }).done(function(data) {
-            answer = data[0];
-
-            var $botHtml = $('<div class="media w-90 mb-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
-            $botHtml.find('p').html(answer);
-            $chatlog.append($botHtml);
-
-            });
-          }
-
-
-        function boardBotResponse() {
-          var $chatlog = $('.js-chat-board');
-          var $displaylog = $('.js-display-board');
-          var rawText = $("#textInput_board").val();
-          var addText = rawText + '&&&'
-
-          var userHtml = '<div class="media w-90 mb-3"><img src="/static/vip.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"><span>' + rawText + '</span></p></div></div></div>';
-          $("#textInput_board").val("");
           $chatlog.append(userHtml);
           $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
 
@@ -193,16 +101,15 @@
             
             if (pdf_doc != 'none'){
                 var $displayHtml = $(pdf_depth);
-                $('#display_board').empty();
+                $('#display_gen').empty();
                 $displaylog.append($displayHtml);
            
             };           
             if (pdf_doc == 'none'){
                 var $displayHtml = $(internet_result);
                 $displayHtml.find('p').html(internet);
-                $('#display_board').empty();
+                $('#display_gen').empty();
                 $displaylog.append($displayHtml);
-           
             }  
             });
           
@@ -213,27 +120,15 @@
             var $botHtml = $('<div class="media w-90 mb-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
             $botHtml.find('p').html(answer);
             $chatlog.append($botHtml);
-
             });
           }
 
+ 
         //触发function
-        $("#textInput_board").keypress(function(e) {
-            if(e.which == 13) {
-                boardBotResponse();}
-          });
-
-
-        $("#buttonInput_board").click(function() {
-            boardBotResponse();
-          });
-
-
         $("#textInput_gen").keypress(function(e) {
             if(e.which == 13) {
                 genBotResponse();}
           });
-
 
         $("#buttonInput_gen").click(function() {
             genBotResponse();
