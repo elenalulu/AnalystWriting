@@ -14,9 +14,9 @@
 
 ## Agent功能
 
-- RAG部分：用elasticsearch做搜索匹配，为推理模型提供新知识。
-- LRM部分：用LRM的int4实现在CPU上的推理问答。
-- 本地知识：可以添加个人pdf文档来定制化数据查询。
+- RAG部分：用elasticsearch做搜索为推理模型提供相关知识。
+- LRM部分：用deepthink-7b的int4实现在CPU上的推理问答。
+- 本地知识：可以添加个人pdf文档为推理模型提供本地知识。
 
 
 <div>
@@ -32,6 +32,7 @@
 1.下载gguf量化模型，放到主文件夹下: 
 
 https://modelscope.cn/models/prithivMLmods/Deepthink-Reasoning-7B-GGUF/resolve/master/Deepthink-Reasoning-7B.Q4_K_M.gguf
+也可以替换成deepseek相关模型，需要修改llamacpp设置。
 
 <br>
 
