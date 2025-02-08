@@ -57,6 +57,12 @@ python main_finance.py
 
 4.如有需要可以部署本地elasticsearch，也可以问作者索要远程es链接
 
+先做本地文档处理：
+```shell
+python deal_local_document.py
+```
+
+并且在main_finance.py内填入合适的es路径
 ```shell
 es = Elasticsearch(
     hosts=["your own path"]

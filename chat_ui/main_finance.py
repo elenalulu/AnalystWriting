@@ -9,6 +9,7 @@ from collections import Counter
 from flask_caching import Cache
 from elasticsearch import Elasticsearch
 
+
 # 连接到远程 Elasticsearch
 es = Elasticsearch(
     hosts=["your own path"]
@@ -27,6 +28,8 @@ app = Flask(__name__)
 #global variable
 first_pdf = ''
 output = ''
+local_pdf = ''
+article = ''
 
 
 def pdf_url(query): 
@@ -55,9 +58,7 @@ def pdf_url(query):
                 break
 
 
-    #先精准查询company，再模糊查询query
-    print (company)
-    
+    #先精准查询company，再模糊查询query    
     result = es.search(
         index="company_abstract",
         body={
@@ -133,6 +134,65 @@ def language_qa(query, output):
         final_answer =  answer.replace('\n','<br>')
 
     return final_answer
+
+
+
+def local_url(query):
+    global local_pdf
+    global article
+
+    #查询es
+    result = es.search(
+    index="local_article",
+    body={
+        "query": {
+            "match": {
+                "article":  {
+                        "query": query,
+                      }
+                }
+            }
+        }
+    )
+
+    article = result['hits']['hits'][0]["_source"]["article"]
+    path = result['hits']['hits'][0]["_source"]["path"]
+    page = result['hits']['hits'][0]["_source"]["page"]
+
+    #复制pdf到\chat_ui\static\personal_document
+    src = path.replace('./personal_pdf','../personal_pdf')
+    dst = path.replace('./personal_pdf','./static/personal_document')
+    if not os.path.exists(dst):
+        shutil.copy(src, dst)
+
+    local_pdf = dst.replace('./static','/static')
+    # print (local_pdf)
+    dialoge = '我找到本地文档->' + '请参考第' + page + '页'
+
+    return local_pdf, dialoge, article
+
+
+def local_qa(query):
+
+    #用远程es查询结果做deepthink
+    content = '根据以下内容，用写一段关于' + query + '的研究，回答得简洁。内容如下：' + article
+    print (content)
+
+    completion = client.chat.completions.create(
+    model="",
+    messages=[
+        {"role": "user", "content": content}
+    ]
+    )
+    output = completion.choices[0].message
+    answer = output.content
+    answer = str(answer)
+
+    if answer != '':
+        final_answer =  answer.replace('\n','<br>')
+
+    return final_answer
+
 
 
 def internet_result(query):
@@ -211,11 +271,25 @@ def home():
 @app.route("/url")
 def get_pdf_url():
     query = request.args.get('msg')
-    first_pdf, dialoge, output = pdf_url(query)
 
-    internet = ''
-    if first_pdf == 'none':
-        internet = internet_result(query)
+    #network chat
+    if '&&&' not in query:
+        first_pdf, dialoge, output = pdf_url(query)
+
+        internet = ''
+        if first_pdf == 'none':
+            internet = internet_result(query)
+
+    #personal chat
+    else: 
+        query = query.replace('&&&','')
+        print ('现在添加了本地文档')
+
+        first_pdf, dialoge, output = local_url(query)
+
+        internet = ''
+        if first_pdf == 'none':
+            internet = internet_result(query)
 
     return [first_pdf, output, dialoge, internet]
 
@@ -225,12 +299,23 @@ def get_doc_response():
     time.sleep(5)
     query = request.args.get('msg')
 
-    if first_pdf != 'none':
-        web_reply = language_qa(query, output) 
+    #network chat
+    if '&&&' not in query:
+        if first_pdf != 'none':
+            web_reply = language_qa(query, output) 
+        else:
+            web_reply = '请等待俺能力升级哈~'
+
+    #personal chat        
     else:
-        web_reply = 'none'
+        query = query.replace('&&&','')
+        if first_pdf != 'none':
+            web_reply = local_qa(query)
+        else:
+            web_reply = '请等待俺能力升级哈~'
 
     return [web_reply]
+
 
 
         
