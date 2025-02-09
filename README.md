@@ -18,7 +18,7 @@
 - RAG部分：用elasticsearch做搜索为推理模型提供相关知识。
 - LRM部分：用deepthink-7b的int4实现在CPU上的推理问答。
 - 本地知识：可以添加个人pdf文档为推理模型提供本地知识。
-
+<br>
 
 <div>
 	<p align="center">
