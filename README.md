@@ -2,7 +2,6 @@
 # FigureChat
 人人可用的数据查询大模型，只需要CPU即可使用。 ⭐本项目测试链接：https://s3.v100.vip:5502/
 
-<br>
 
 <div>
 	<p align="center">
