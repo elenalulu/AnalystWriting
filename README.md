@@ -64,12 +64,13 @@ es = Elasticsearch(
 <br>
 
 ## 个人文档使用
-1.向personal_pdf文件夹放入个人pdf。 <br>
-2.在ui界面，"点此添加本地文档"，即可进行本地文档查询。 <br>
-先做本地文档处理：
+1.向personal_pdf文件夹放入个人pdf。 <br><br>
+2.先做本地文档处理：
 ```shell
 python deal_local_document.py
 ```
+
+3.再在ui界面，"点此添加本地文档"，即可进行本地文档查询。 <br>
 
 
 ## Contact
