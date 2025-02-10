@@ -12,7 +12,7 @@ import ollama
 
 # 连接到远程 Elasticsearch
 es = Elasticsearch(
-    hosts=["your path"]
+    hosts=["your own path"]
 )
 
 
@@ -119,7 +119,7 @@ def pdf_url(query):
     return dialoge, output, text
 
 
-def language_qa(query, output): 
+def analyst_writing(query, output): 
 
     content = '根据以下内容，用写一段关于' + query + '的研究，以数据分析为主，不要出现根据谁的报告这种。内容如下：' + output
     print (content)
@@ -270,9 +270,9 @@ def internet_result(query):
             title = item[0]
             content = item[1]
             url = item[2]
-            output = output + '<strong>' + title + '</strong>' + '<br><br>' 
-            output = output + content + '<br><br>'
-            output = output + '<a href="' + url + '" target="_blank">点此链接查看详情<a><br><br><br>'
+            output = output + '<strong>' + title + '</strong>' + '<br>' 
+            output = output + content + '<br>'
+            output = output + '<a href="' + url + '" target="_blank">点此链接查看详情<a><br><br>'
             count_baidu += 1
 
     return output
@@ -289,11 +289,14 @@ def home():
 def get_pdf_url():
     query = request.args.get('msg')
 
-    #network chat
+    #network
     if '&&&' not in query:
         dialoge, output, text = pdf_url(query)
 
-    #personal chat
+        if '联网' in dialoge or '无法' in dialoge: #internet
+            dialoge = internet_result(query)
+
+    #personal
     else: 
         query = query.replace('&&&','')
         dialoge, output, text = local_url(query)
@@ -314,12 +317,12 @@ def get_doc_response():
     query = request.args.get('msg')
 
     web_reply = 'none'
-    #network chat
+    #network
     if '&&&' not in query:
         if output != 'none':
-            web_reply = language_qa(query, output) 
+            web_reply = analyst_writing(query, output) 
 
-    #personal chat        
+    #personal      
     else:
         if article != 'none':
             query = query.replace('&&&','')
