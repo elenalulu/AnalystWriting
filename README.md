@@ -66,6 +66,7 @@ es = Elasticsearch(
     hosts=["your own path"]
 )
 ```
+同时在deal_local_document.py内填入合适的es路径
 <br>
 
 ## 个人文档使用
