@@ -54,12 +54,6 @@ python main_finance.py
 <br>
 
 5.如有需要可以部署本地elasticsearch，也可以问作者远程es链接
-
-先做本地文档处理：
-```shell
-python deal_local_document.py
-```
-
 并且在main_finance.py内填入合适的es路径
 ```shell
 es = Elasticsearch(
@@ -72,7 +66,10 @@ es = Elasticsearch(
 ## 个人文档使用
 1.向personal_pdf文件夹放入个人pdf。 <br>
 2.在ui界面，"点此添加本地文档"，即可进行本地文档查询。 <br>
-
+先做本地文档处理：
+```shell
+python deal_local_document.py
+```
 
 
 ## Contact
