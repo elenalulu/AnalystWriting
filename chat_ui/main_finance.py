@@ -310,7 +310,7 @@ def get_pdf_text():
 
 @app.route("/qa")
 def get_doc_response():
-    time.sleep(5)
+    time.sleep(10)
     query = request.args.get('msg')
 
     web_reply = 'none'
