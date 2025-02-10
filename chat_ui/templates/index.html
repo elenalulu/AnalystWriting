@@ -7,61 +7,204 @@
     <link rel="stylesheet" href="/static/bootstrap.min.css">
     <link rel="stylesheet" href="/static/custom.css"/>
     <script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.2.1/jquery.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <title>AI550 聊天界面</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #3498db, #b583d6); /* 蓝紫渐变色 */
+            color: black;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            font-family: 'Lobster', cursive; /* 使用 Lobster 字体 */
+            font-size: 48px;
+            color: #b583d6; /* 字体颜色 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 文字阴影 */
+            background: linear-gradient(90deg, #b583d6, #ffcc00); /* 渐变背景 */
+            -webkit-background-clip: text; /* 背景裁剪为文字 */
+            -webkit-text-fill-color: transparent; /* 文字颜色透明 */
+            margin: 0 0 20px 0; /* 调整间距 */
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* 聊天主界面 */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+        }
+
+        /* 聊天消息区域 */
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* 消息容器 */
+        .message-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        /* 圆形头像 */
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .avatar.user {
+            background-color: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .avatar.bot {
+            background-color: #28a745;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        /* 消息气泡 */
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .message.user {
+            background-color: white;
+            color: #333;
+            margin-right: auto;
+        }
+
+        .message.bot {
+            background-color: #f1f1f1;
+            color: #333;
+            margin-right: auto;
+        }
+
+        /* 输入框区域 */
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .chat-input button:hover {
+            background-color: #3498db;
+        }
+    </style>
+
   </head>
 
 
   <body>
-    <!-- nav -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand">
-        <img src="/static/chat_bot_logo.png" width="35" height="35" class="d-inline-block align-top" alt="ChatBot">
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-
-         
-         <li class="nav-item">
-          <a id='board_click' class="nav-link active" href="#board" style="color: grey;" onclick="showAndHidden2()">点此添加本地文档</a>
-         </li>
-        
-
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+        <h2>AI550</h2>
+        <ul>
+            <li><a id='board_click' class="nav-link active" href="#board" onclick="showAndHidden()">添加本地文档</a></li>
         </ul>
-      </div>
-    </nav>
-    <!-- nav end-->
+    </div>
 
-
-    <!-- chatbox-->
-    <div>
-      <div id="chat_gen" style="display:block" class="py-2 px-1">
-        <div  class="left col-5 px-5 py-5 chat-box js-chat-gen bg-white">
-          <div class="media w-90 mb-1"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle">
-            <div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p><a>
-            请说出您的问题~
-          </a></div></div></div>
+    <!-- 聊天主界面 -->
+    <div class="chat-container">
+        <!-- 聊天消息区域 -->
+        <div class="chat-messages js-chat-gen" id="chat-messages">
+            <!-- 示例消息 -->
+            <div class="message-container">
+                <div class="media w-90 mb-1 py-2 px-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle">
+                <div class="ml-4"><div class="white rounded py-1 px-1 mb-2" style="margin-right: 20px;"><p class="text-small mb-0 user-message text-left"></p><a>
+                我是AI550，愿意为您效劳~
+              </a></div></div></div>
+            </div>
         </div>
 
-        <div id="display_gen" style="display:block" class="right col-7 px-1 py-0 display-box js-display-gen">
-          <div class="ml-4"><div class="py-2 px-3 mb-2" style="font-size:15px"><p class="text-small mb-0 user-message text-left">        
-          </p></div></div>
+        <!-- 输入框区域 -->
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="输入消息..." onkeypress="handleKeyPress(event)">
+            <button id="chat-button" onclick="sendMessage()">发送</button>
         </div>
-
-        <div id="userInput_gen" class="left col-5 input-group input-group-lg mt-1 bg-white">
-          <input id="textInput_gen" type="text" name="msg" placeholder="点此聊天..." class="form-control js-text">
-          <input id="buttonInput_gen" type="submit" value="发送">
-        </div>
-      </div>
+    </div>
 
 
-      <script>   
+
+    <script>   
 
         var localfile = 'off'
 
-        function showAndHidden2(){ 
+        function showAndHidden(){ 
           var p5=document.getElementById("board_click"); 
           p5.style.color='white';
           localfile = 'turnon'
@@ -71,7 +214,7 @@
         function genBotResponse() {
           var $chatlog = $('.js-chat-gen');
           var $displaylog = $('.js-display-gen');
-          var rawText = $("#textInput_gen").val();
+          var rawText = $("#chat-input").val();
 
           if (localfile == 'turnon'){
                 var addText = rawText + '&&&'
@@ -80,57 +223,100 @@
                 var addText = rawText
             }; 
 
-          var userHtml = '<div class="media w-90 mb-3"><img src="/static/vip.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"><span>' + rawText + '</span></p></div></div></div>';
-          $("#textInput_gen").val("");
+          var userHtml = '<div class="media w-90 mb-3 py-2 px-3"><img src="/static/vip.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2" style="display: inline-block; margin-right: 100px;"><p class="text-small mb-0 user-message text-left"><span>' + rawText + '</span></p></div></div></div>';
+          $("#chat-input").val("");
           $chatlog.append(userHtml);
           $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
 
 
           $.get("/url", { msg: addText }).done(function(data) {
-            pdf_doc = data[0];
-            dialoge = data[2]
-            internet = data[3];
-          
-            pdf_depth = '<embed width="100%" height="100%" src="' + pdf_doc + '"></embed>' 
-            internet_result = $('<div class="ml-4"><div class="py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left" ></p></div></div>');
+            const dialoge = data[0]
 
-            var $botHtml = $('<div class="media w-90 mb-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
+            var $botHtml = $('<div class="media w-90 mb-3 py-2 px-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="white rounded py-1 px-1 mb-2" style="display: inline-block; margin-right: 100px;"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
+    
             $botHtml.find('p').html(dialoge);
             $chatlog.append($botHtml);
+            });
 
+
+          $.get("/text", { msg: addText }).done(function(data) {
+            const text = data[0]
+
+            function typeText(element, text, speed) {
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        // 如果当前字符是 <br>，直接插入 HTML 换行符
+                        if (text.substr(i, 4) === '<br>') {
+                            element.innerHTML += '<br>'; // 使用 innerHTML 插入换行符
+                            i += 4; // 跳过 <br> 的 4 个字符
+                        } else {
+                            element.innerHTML += text.charAt(i); // 使用 innerHTML 添加普通字符
+                            i++;
+                        }
+
+                        // 每次添加字符后，滚动到底部
+                        $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
+                    } else {
+                        clearInterval(interval); // 停止定时器
+                    }
+                }, speed);
+            }
             
-            if (pdf_doc != 'none'){
-                var $displayHtml = $(pdf_depth);
-                $('#display_gen').empty();
-                $displaylog.append($displayHtml);
-           
-            };           
-            if (pdf_doc == 'none'){
-                var $displayHtml = $(internet_result);
-                $displayHtml.find('p').html(internet);
-                $('#display_gen').empty();
-                $displaylog.append($displayHtml);
-            }  
+            var $botHtml = $('<div class="media w-90 mb-3 py-2 px-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="white rounded py-1 px-1 mb-2" style="display: inline-block; margin-right: 100px;"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
+            
+            if (text != '<原文>'){
+                const $paragraph = $botHtml.find('p');
+                $paragraph.html('');
+                $chatlog.append($botHtml);
+                typeText($paragraph[0], text, 80);
+                }; 
             });
           
 
           $.get("/qa", { msg: addText }).done(function(data) {
-            answer = data[0];
+            const answer = data[0];
 
-            var $botHtml = $('<div class="media w-90 mb-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
-            $botHtml.find('p').html(answer);
-            $chatlog.append($botHtml);
+            function typeText(element, text, speed) {
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        // 如果当前字符是 <br>，直接插入 HTML 换行符
+                        if (text.substr(i, 4) === '<br>') {
+                            element.innerHTML += '<br>'; // 使用 innerHTML 插入换行符
+                            i += 4; // 跳过 <br> 的 4 个字符
+                        } else {
+                            element.innerHTML += text.charAt(i); // 使用 innerHTML 添加普通字符
+                            i++;
+                        }
+
+                        // 每次添加字符后，滚动到底部
+                        $chatlog[0].scrollTop = $chatlog[0].scrollHeight;
+                    } else {
+                        clearInterval(interval); // 停止定时器
+                    }
+                }, speed);
+            }
+
+            var $botHtml = $('<div class="media w-90 mb-3 py-2 px-3"><img src="/static/laiteng.jpg" alt="user" width="40" class="rounded-circle"><div class="ml-4"><div class="white rounded py-1 px-1 mb-2" style="display: inline-block; margin-right: 100px;"><p class="text-small mb-0 user-message text-left"></p></div></div></div>');
+            
+            if (answer != 'none'){
+                const $paragraph = $botHtml.find('p');
+                $paragraph.html('');
+                $chatlog.append($botHtml);
+                typeText($paragraph[0], answer, 80);
+            };  
             });
           }
 
  
         //触发function
-        $("#textInput_gen").keypress(function(e) {
+        $("#chat-input").keypress(function(e) {
             if(e.which == 13) {
                 genBotResponse();}
           });
 
-        $("#buttonInput_gen").click(function() {
+        $("#chat-button").click(function() {
             genBotResponse();
           });
         

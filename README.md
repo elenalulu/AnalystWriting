@@ -15,7 +15,7 @@
 ## Agent功能
 
 - RAG部分：用elasticsearch做搜索为推理模型提供相关知识。
-- LRM部分：用deepthink-7b的int4实现在CPU上的推理问答。
+- LRM部分：用deepseek-r1 7b的int4实现在CPU上的推理问答。
 - 本地知识：可以添加个人pdf文档为推理模型提供本地知识。
 <br>
 
@@ -29,23 +29,22 @@
 
 ## 安装
 
-1.下载gguf量化模型，放到主文件夹下: 
-
-https://modelscope.cn/models/prithivMLmods/Deepthink-Reasoning-7B-GGUF/resolve/master/Deepthink-Reasoning-7B.Q4_K_M.gguf
-也可以替换成deepseek相关模型，需要修改llamacpp设置。
-
+1.安装ollama：https://github.com/ollama/ollama 
 <br>
 
-2.解压llama_cpp.rar压缩包，放到主文件夹下；并启动量化模型:
-
+2.安装完成后拉取deepseek-r1模型：
 ```shell
-cd llama_cpp
-
-llama-server.exe -m ../Qwen2.5-7B-Instruct.Q4_K_M.gguf -c 2048
+ollama run deepseek-r1
 ```
 <br>
 
-3.打开另一个终端，启动ui界面:
+3.安装python中的ollama：
+```shell
+pip install ollama
+```
+<br>
+
+4.启动ui界面:
 
 ```shell
 cd chat_ui
@@ -55,7 +54,7 @@ python main_finance.py
 
 <br>
 
-4.如有需要可以部署本地elasticsearch，也可以问作者索要远程es链接
+5.如有需要可以部署本地elasticsearch，也可以问作者索要远程es链接
 
 先做本地文档处理：
 ```shell
