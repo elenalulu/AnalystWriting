@@ -12,7 +12,7 @@
 -----------------
 
 
-## Agent功能
+## 功能
 
 - RAG部分：用elasticsearch做搜索为推理模型提供相关知识。
 - LRM部分：用deepseek-r1的7b量化模型实现CPU级推理问答。
@@ -70,7 +70,7 @@ es = Elasticsearch(
 python deal_local_document.py
 ```
 
-3.再在ui界面，"点此添加本地文档"，即可进行本地文档查询。 <br>
+3.再在ui界面，点击"添加本地文档"，即可进行本地文档查询。 <br><br>
 
 
 ## Contact
