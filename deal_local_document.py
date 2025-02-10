@@ -60,7 +60,7 @@ from elasticsearch import helpers
 import json
 
 logging.basicConfig()
-es = Elasticsearch(hosts=["your own path"])
+es = Elasticsearch(hosts=["your path"])
 
 def importCSV(indexName,typeName,fileName):
     if not os.path.exists(fileName):

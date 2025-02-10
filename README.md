@@ -15,7 +15,7 @@
 ## Agent功能
 
 - RAG部分：用elasticsearch做搜索为推理模型提供相关知识。
-- LRM部分：用deepseek-r1 7b的int4实现在CPU上的推理问答。
+- LRM部分：用deepseek-r1的7b量化模型实现CPU级推理问答。
 - 本地知识：可以添加个人pdf文档为推理模型提供本地知识。
 <br>
 
@@ -51,10 +51,9 @@ cd chat_ui
 
 python main_finance.py
 ```
-
 <br>
 
-5.如有需要可以部署本地elasticsearch，也可以问作者索要远程es链接
+5.如有需要可以部署本地elasticsearch，也可以问作者远程es链接
 
 先做本地文档处理：
 ```shell
