@@ -53,7 +53,7 @@ python main_finance.py
 ```
 <br>
 
-5.如有需要可以部署本地elasticsearch，也可以问作者远程es链接
+5.如有需要可以部署本地elasticsearch，也可以问作者远程es链接<br>
 并且在main_finance.py内填入合适的es路径
 ```shell
 es = Elasticsearch(
