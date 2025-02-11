@@ -1,6 +1,6 @@
 
 # FigureChat
-人人可用的数据查询大模型，只需要CPU即可使用。 ⭐本项目测试链接：https://s3.v100.vip:5502/
+人人可用的数据查询大模型，只需要CPU即可使用。 
 <br>
 🚀运行本代码需要部署elasticsearch，运行前请先在/chat_ui/main_finance.py中填入es路径
 <div>
